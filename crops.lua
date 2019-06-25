@@ -9,10 +9,7 @@ PlacedCropStick = false
 
 function PlaceCropStick ()
     r.select(1) -- select cropstick
-    r.place() -- place the cropstick
-    ic.equip() -- equip the cropstick
-    r.use() -- use the cropstick so it becomes a crosscrop stick
-    ic.equip() -- unequip it
+    r.place(s.bottom,true) -- place the cropstick
 end
  
 function PlaceStick ()
@@ -138,7 +135,7 @@ function CheckCropStick () -- checks the crop stick
         PlacedCropStick = true
     end
 end
- 
+
 function setContains(set, key) -- used for looking if a value exists in a table
     return set[key] ~= nilt
 end
