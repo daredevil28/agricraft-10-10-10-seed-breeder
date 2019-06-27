@@ -5,6 +5,8 @@
 <p>Geolyzer, Inventory Controller, inventory upgrade, the setup similar to the image</p>
 <p>Place cropsticks in slot 1 and clipper in slot 16</p>
 
+<p>Requires custom agricraft version</p>
+
 ![image](https://i.imgur.com/pwwtbs4.png)
 
 
