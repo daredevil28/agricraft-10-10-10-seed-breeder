@@ -7,7 +7,7 @@
 
 <p>Requires custom agricraft version</p>
 
-![image](https://i.imgur.com/pwwtbs4.png)
+![image](https://i.imgur.com/Tss7XX3.png)
 
 
 <p>To do:</p>
