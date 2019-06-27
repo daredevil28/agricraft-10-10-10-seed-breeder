@@ -13,4 +13,3 @@
 <p>To do:</p>
 <p>Check if the seed is 10/10/10</p>
 <p>Make sure to check if a weed has sneakily spawned in when upgrading crops</p>
-<p>Auto refill cropsticks when empty</p>
