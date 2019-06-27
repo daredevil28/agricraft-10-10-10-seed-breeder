@@ -3,20 +3,36 @@ local s = require("sides")
 local r = require("robot")
 local g = component.geolyzer
 local ic = component.inventory_controller
- 
+
 UpgradeTime = false
 PlacedCropStick = false
 
 function PlaceCropStick ()
+    print("placing new cropstick")
+    cropstickcount = ic.getStackInInternalSlot(1)
+    if(cropstickcount == nil or cropstickcount["size"] == 1) then 
+        print("getting new cropsticks")
+        GetNewCropSticks()
+    end
     r.select(1) -- select cropstick
     r.place(s.bottom,true) -- place the cropstick
 end
- 
+
+function GetNewCropSticks()
+    for i=1,ic.getInventorySize(s.top) do
+        if(ic.getStackInSlot(s.top,i) ~= nil) then
+            r.select(1)
+            ic.suckFromSlot(s.top,i,63)
+            break
+        end
+    end
+end
+
 function PlaceStick ()
     r.select(1) -- select cropstick
     r.place() -- place cropstick
 end
- 
+
 function PlaceSeed ()
     r.select(6) 
     ic.equip()
@@ -60,6 +76,40 @@ function UpgradePlants()
     UpgradeTime = true -- start the upgradetime in the while loop which runs WaitTillFullGrownThenCut()
 end
 
+--[[
+function CompareSeed()
+    CropTable = g.analyze(s.front)
+    SeedTable = ic.getStackInInternalSlot(5)
+
+    CropGrowth = CropTable["agricraft"]["growth"]
+    CropGain = CropTable["agricraft"]["gain"]
+    CropStrength = CropTable["agricraft"]["strength"]
+
+    SeedGrowth = SeedTable["agricraft"]["growth"]
+    SeedGain = SeedTable["agricraft"]["gain"]
+    SeedStrength = SeedTable["agricraft"]["strength"]
+
+    Growth = false
+    Gain = false
+    Strength = false
+
+    if SeedGrowth >= CropGrowth
+        Growth = true
+    end
+    if SeedGain >= CropGain
+        Gain = true
+    end
+    if SeedStrength >= SeedStrength
+        Growth = true
+    end
+end
+--]]
+
+function RemoveExcessEssence()
+    r.turnRight()
+    r.select(3)
+    r.drop()
+end
 
 function WaitTillFullGrownThenCut()
     print("checking plant if full grown")
@@ -70,7 +120,7 @@ function WaitTillFullGrownThenCut()
         os.sleep(1)
     end
 end
- 
+
 function CutPlantThenUpgrade()
     r.select(16) -- select clipper
     ic.equip() -- equip clipper
@@ -103,20 +153,21 @@ function CutPlantThenUpgrade()
         r.turnLeft()
     end
 end
- 
+
 function ReturnToOriginalSpot()
     UpgradeTime = false -- upgrading is completed
     r.turnRight() -- turn to middle
     r.forward() -- move to middle
-    r.turnLeft() -- turn to cropstick
+    RemoveExcessEssence()
+    r.turnAround() -- turn to cropstick
 end
- 
+
 function UseConstantly(amount) -- use constantly function
     for i=amount,1,-1 do
         r.use()
     end
 end
- 
+
 function CheckCropStick () -- checks the crop stick
     PlantTable = g.analyze(s.front) -- puts de table of the cropstick in front of it in a variable
     if setContains(PlantTable, "agricraft") then -- if it has agricraft as a key in the table
@@ -139,7 +190,7 @@ end
 function setContains(set, key) -- used for looking if a value exists in a table
     return set[key] ~= nilt
 end
- 
+
 while true do
     if UpgradeTime == false then
         print("checking cropstick")
